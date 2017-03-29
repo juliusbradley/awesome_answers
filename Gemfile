@@ -53,12 +53,18 @@ gem 'cowsay', '~> 0.3.0'
 
 gem 'colorize', '0.8.1'
 
+gem 'faker'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
 end
 
 group :development do
+  gem 'interactive_editor'
+  gem 'awesome_print'
+  gem 'hirb'
+
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '~> 3.0.5'
