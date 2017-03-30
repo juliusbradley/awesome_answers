@@ -19,6 +19,10 @@ Rails.application.routes.draw do
 
   post('/contact', { to: 'contact#create', as: 'contact_submit' })
 
+  get('/questions/new', { to: 'questions#new', as: 'new_question' })
+  post('/questions', { to: 'questions#create', as: 'questions' })
+
+
   # this will make the home page of the application go to WelcomeController with
   # index action
   root 'welcome#index'
