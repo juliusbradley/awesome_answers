@@ -3,6 +3,38 @@
 # All the funcationalities we're going to be using in our Quesiton model come
 # from `ActiveRecord::Base` which leverages Ruby's meta programming features.
 class Question < ApplicationRecord
+  # dependent: :destroy will delete all associated answers before deleting the
+   #                     question when you call `question.destroy`
+   # dependent: :nullify will update the `question_id` field to `null` in all the
+   #                     associated answers before deleting the question when you
+   #                     call `question.destroy`
+  has_many :answers, dependent: :destroy
+  # as of Rails 5, belongs_to :subject will enforce a validation
+  # that the association must be present by default
+  # to make it optional, give belongs_to a second argument `optional: true`
+  belongs_to :subject, optional: true
+
+  belongs_to :user, optional: true
+
+  # has_many :answers adds the following instance methods
+  # to this model, Question:
+  # answers
+  # answers<<(object, ...)
+  # answers.delete(object, ...)
+  # answers.destroy(object, ...)
+  # answers=(objects)
+  # answers
+  # answers=(ids)
+  # answers.clear
+  # answers.empty?
+  # answers.size
+  # answers.find(...)
+  # answers.where(...)
+  # answers.exists?(...)
+  # answers.build(attributes = {}, ...)
+  # answers.create(attributes = {})
+  # answers.create!(attributes = {})
+  # http://guides.rubyonrails.org/association_basics.html#has-many-association-reference
 
   validates(:title, { presence: { message: 'must be present!' },
                       uniqueness: true })
