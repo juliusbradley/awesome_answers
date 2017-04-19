@@ -21,7 +21,7 @@ class QuestionsController < ApplicationController
     if @question.save
       # redirect_to question_path({id: @question.id})
       # redirect_to question_path(@question.id)
-
+      RemindQuestionOwnerJob.set(wait: 5.days).perform_later(@question.id)
       # Rails gives us access to `flash` object which looks like a Hash. flash
       # utilizes cookies to store a bit of information that we can access in the
       # next request. Flash will automatically be deleted when it's displayed.

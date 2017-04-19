@@ -16,6 +16,7 @@ class Question < ApplicationRecord
 
   belongs_to :user, optional: true
 
+
   # has_many :answers adds the following instance methods
   # to this model, Question:
   # answers

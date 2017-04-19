@@ -25,7 +25,8 @@ class Ability
     can [:edit, :destroy], Question do |question|
       question.user == user
     end
-    #OR
+
+    #
     #user_id is inside the 'questions' table and 'user' is the signed in user
     #(if the user is signed in) or 'User.new' as per line 14
     #can: edit, Question, user_id: user,id

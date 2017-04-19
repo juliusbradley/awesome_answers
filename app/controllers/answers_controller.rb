@@ -8,6 +8,7 @@ class AnswersController < ApplicationController
     # @answer = @question.answers.build(answer_params)
 
     if @answer.save
+      AnswersMailer.notify_question_owner(@answer).deliver_later
       redirect_to question_path(@question), notice: 'Answer Created!'
     else
       render '/questions/show'

@@ -8,3 +8,7 @@ Make sure you have postgres installed then run:
 ```
 rails db:create
 ```
+
+Duplicate 'config/initializers/app_keys.rb.example' to
+config/initializers/app_keys.rb and put in real values for email smtp
+server credentials
