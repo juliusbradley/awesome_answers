@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
-
   match "/delayed_job" => DelayedJobWeb, anchor: false, via: [:get, :post]
+
 
   # When we receive a `GET` request with URL `/about`, then Rails will invoke
   # the `about_controller` with `index` action (action is just a method that is
@@ -25,7 +25,10 @@ Rails.application.routes.draw do
   # resources :contacts, only: [:new, :create]
 
   resources :questions do
+    resources :likes, only: [:create, :destroy]
     resources :answers, only: [:create, :destroy]
+
+    resources :votes, only: [:create, :destroy, :update]
 
     # Nesting resources :answers, only: [:create, :destroy] in resources :questions
     # will create the following routes:
@@ -38,7 +41,9 @@ Rails.application.routes.draw do
     # make sure to include a question_id as argument or a question model
   end
 
-  resources :users, only: [:new, :create]
+  resources :users, only: [:new, :create] do
+    resources :likes, only: [:index]
+  end
 
   resources :sessions, only: [:new, :create] do
     # when you define a route with `on: :collection` option, it skips having an

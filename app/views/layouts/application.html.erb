@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Awesome Answers</title>
+    <title>Super Awesome Answers</title>
     <%= csrf_meta_tags %>
 
-<%#the two lines below reference the manifest file or whatthe manifest files
-generate for us. In development environment, we will see all the files included
-individually. In production, those will be one file each %>
+    <%# the two lines below reference the manifest file or what the manifest
+        files generate for us. In development environment, we will see all the
+        files included individually. In production, those will be one file each
+      %>
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
   </head>
@@ -21,13 +22,15 @@ individually. In production, those will be one file each %>
     |
     <%= link_to 'About Us', about_path %>
     |
-    <%= link_to 'Contact Us', contact_path %>``
+    <%= link_to 'Contact Us', contact_path %>
     |
     <%= link_to 'All Questions', questions_path %>
     |
     <% if user_signed_in? %>
       Hello <%= current_user.first_name %>,
       <%= link_to 'Sign Out', sessions_path, method: :delete %>
+      |
+      <%= link_to 'Liked Questions', user_likes_path(current_user) %>
     <% else %>
       <%= link_to 'Sign Up', new_user_path %>
       |

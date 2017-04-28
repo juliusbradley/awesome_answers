@@ -9,6 +9,13 @@ class Question < ApplicationRecord
    #                     associated answers before deleting the question when you
    #                     call `question.destroy`
   has_many :answers, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :likers, through: :likes, source: :user
+  has_many :votes, dependent: :destroy
+  has_many :voters, through: :votes, source: :user
+  has_many :taggings, dependent: :destroy
+  has_many :tags, through: :taggings
+
   # as of Rails 5, belongs_to :subject will enforce a validation
   # that the association must be present by default
   # to make it optional, give belongs_to a second argument `optional: true`
@@ -21,7 +28,8 @@ class Question < ApplicationRecord
   # to this model, Question:
   # answers
   # answers<<(object, ...)
-  # answers.delete(object, ...)
+  # answers.delete
+#  (object, ...)
   # answers.destroy(object, ...)
   # answers=(objects)
   # answers
@@ -58,6 +66,19 @@ class Question < ApplicationRecord
   def self.recent(number)
     order(created_at: :desc).limit(number)
   end
+
+ def liked_by?(user)
+  likes.exists?(user: user)
+ end
+
+  def like_for(user)
+    likes.find_by(user: user)
+  end
+
+def votes_count
+  #TODO in a single query
+  votes.where(is_up: true).count - votes.where(is_up: false).count
+end
 
   private
 

@@ -60,7 +60,10 @@ gem 'cancancan', '~> 1.10'
 gem 'bootstrap-sass', '~> 3.3.6'
   gem 'delayed_job_active_record'
   gem 'delayed_job_web'
+  gem 'font-awesome-rails'
   gem 'sinatra', '2.0.0.rc2'
+  gem 'chosen-rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
