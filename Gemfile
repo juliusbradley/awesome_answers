@@ -43,6 +43,8 @@ gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
+gem 'active_model_serializers'
+gem 'omniauth-twitter'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
@@ -50,7 +52,7 @@ gem 'jbuilder', '~> 2.5'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
+gem 'rack-cors'
 gem 'cowsay', '~> 0.3.0'
 
 gem 'colorize', '0.8.1'
@@ -63,10 +65,18 @@ gem 'bootstrap-sass', '~> 3.3.6'
   gem 'font-awesome-rails'
   gem 'sinatra', '2.0.0.rc2'
   gem 'chosen-rails'
+  gem 'simple_form'
+  gem 'friendly_id'
+  gem 'carrierwave'
+  gem 'mini_magick'
+  gem 'fog'
+  gem 'twitter'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'pry'
+  gem 'pry-rails'
 end
 
 group :development do

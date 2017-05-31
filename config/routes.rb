@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+   get '/auth/twitter', as: :sign_in_with_twitter
+   get '/auth/:provider/callback' => 'callbacks#index'
 
   match "/delayed_job" => DelayedJobWeb, anchor: false, via: [:get, :post]
 
@@ -23,6 +25,15 @@ Rails.application.routes.draw do
   post('/contact', { to: 'contact#create', as: 'contact_submit' })
 
   # resources :contacts, only: [:new, :create]
+
+
+   namespace :api, defaults: { format: :json} do
+     namespace :v1 do
+       #api/v1/questions/json    => INDEX
+       #api/v1/questions/1.json  => SHOW
+     resources :questions, only: [:index, :show, :create]
+   end
+ end
 
   resources :questions do
     resources :likes, only: [:create, :destroy]

@@ -10,3 +10,4 @@ class RemindQuestionOwnerJob < ApplicationJob
     end
   end
 end
+    

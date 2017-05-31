@@ -3,12 +3,13 @@
 # All the funcationalities we're going to be using in our Quesiton model come
 # from `ActiveRecord::Base` which leverages Ruby's meta programming features.
 class Question < ApplicationRecord
+  attr_accessor :tweet_this
   # dependent: :destroy will delete all associated answers before deleting the
    #                     question when you call `question.destroy`
    # dependent: :nullify will update the `question_id` field to `null` in all the
    #                     associated answers before deleting the question when you
    #                     call `question.destroy`
-  has_many :answers, dependent: :destroy
+  has_many :answers, lambda { order(created_at: :desc) }, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :likers, through: :likes, source: :user
   has_many :votes, dependent: :destroy
@@ -23,6 +24,11 @@ class Question < ApplicationRecord
 
   belongs_to :user, optional: true
 
+extend FriendlyId
+  friendly_id :title, use: [:slugged, :history, :finders]
+
+
+mount_uploader :image, ImageUploader
 
   # has_many :answers adds the following instance methods
   # to this model, Question:
@@ -79,6 +85,12 @@ def votes_count
   #TODO in a single query
   votes.where(is_up: true).count - votes.where(is_up: false).count
 end
+
+#Rails uses 'to_param' method in ActiceRecord to know what to use for the url
+#by default `to_param` methods will return the `id`
+# def to_param
+#  "#{id}-#{title}".parameterize
+# end
 
   private
 

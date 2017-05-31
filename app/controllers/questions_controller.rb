@@ -19,9 +19,15 @@ class QuestionsController < ApplicationController
     @question = Question.new question_params
     @question.user = current_user
     if @question.save
+
+      if @question.tweet_this
+        client.update @question.title
+      end
+
+      RemindQuestionOwnerJob.set(wait: 5.days).perform_later(@question.id)
       # redirect_to question_path({id: @question.id})
       # redirect_to question_path(@question.id)
-      RemindQuestionOwnerJob.set(wait: 5.days).perform_later(@question.id)
+
       # Rails gives us access to `flash` object which looks like a Hash. flash
       # utilizes cookies to store a bit of information that we can access in the
       # next request. Flash will automatically be deleted when it's displayed.
@@ -40,6 +46,21 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    # render 'questions/show'
+
+    # `respond_to` method allows us to render different outcomes depending on
+    # the format of the requests. Remeber that the default format for any
+    # request in Rails applications is HTML.
+    respond_to do |format|
+      # this ð means that if the format of the request is HTML then we will
+      # render the `show` template (questions/show.html.erb)
+      format.html  { render :show }
+
+      # this ð will render `json` if the format of the request is JSON.
+      # ActiveRecord has a built-in feature to generate JSON from any object of
+      # ActiveRecord.
+      format.json  { render json: @question }
+    end
   end
 
   def index
@@ -47,15 +68,15 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    #can? is a helper method that came from CanCanCan which helps us enforce
-    #permission rules in the controllers and views
+    # can? is a helper method that came from CanCanCan which helps us enforce
+    # permission rules in the controllers and views
     redirect_to root_path, alert: 'access denied' unless can? :edit, @question
   end
 
   def update
     if !(can? :edit, @question)
       redirect_to root_path, alert: 'access denied'
-    elsif @question.update(question_params)
+    elsif @question.update(question_params.merge({ slug: nil }))
       redirect_to question_path(@question), notice: 'Question updated'
     else
       render :edit
@@ -63,13 +84,13 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-     if can? :destroy, @question
-       @question.destroy
-       redirect_to questions_path, notice: 'Question Deleted'
-     else
-       redirect_to root_path, alert: 'access denied'
-     end
-   end
+    if can? :destroy, @question
+      @question.destroy
+      redirect_to questions_path, notice: 'Question Deleted'
+    else
+      redirect_to root_path, alert: 'access denied'
+    end
+  end
 
   private
 
@@ -81,7 +102,16 @@ class QuestionsController < ApplicationController
     # the line below is what's called "Strong Parameters" feautre that was added
     # to Rails starting with version 4 to help developer be more explicit about
     # the parameters that they want to allow the user to submit
-    params.require(:question).permit([:title, :body, {:tag_ids: [] } ])
+    params.require(:question).permit([:title, :body, { tag_ids: [] }, :image, :tweet_this ])
+  end
+
+  def client
+    ::Twitter::REST::Client.new do |config|
+      config.consumer_key        = ENV['TWITTER_API_KEY']
+      config.consumer_secret     = ENV['TWITTER_SECRET_KEY']
+      config.access_token        = current_user.oauth_token
+      config.access_token_secret = current_user.oauth_secret
+    end
   end
 
 end
