@@ -59,7 +59,7 @@ gem 'colorize', '0.8.1'
 
 gem 'faker'
 gem 'cancancan', '~> 1.10'
-gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.4.1'
   gem 'delayed_job_active_record'
   gem 'delayed_job_web'
   gem 'font-awesome-rails'
